@@ -201,29 +201,47 @@ MangoHud provides:
 
 ## Logging and Investigation Tools
 
+### Gaming Mode Constraints
+**Important**: When switching from Desktop Mode to Gaming Mode, Steam Deck suspends most Desktop processes to optimize for gaming performance. This means background monitoring scripts won't persist across mode switches.
+
 ### Available Scripts
-The project includes several scripts to help investigate the recording issue:
+The project includes several scripts designed to work within these constraints:
 
-1. **`scripts/monitor-recording-logs.sh`**: Comprehensive log monitoring
-   - Monitors gamescope, Steam, system, and MangoHud logs
-   - Captures timestamped events during recording
-   - Creates detailed log files for analysis
+1. **`scripts/enable-verbose-logging.sh`**: System-level verbose logging setup
+   - Enables debug logging that persists across Gaming Mode switches
+   - Sets up systemd overrides for gamescope-session service
+   - One-time setup, then logs are automatic
 
-2. **`scripts/compare-recording-modes.sh`**: Mode comparison tool
-   - Compares Big Picture Mode vs Gaming Mode behavior
-   - Captures system state differences
-   - Provides analysis guidance
+2. **`scripts/compare-recording-modes.sh`**: Guided mode comparison tool
+   - Walks through Big Picture Mode vs Gaming Mode testing
+   - Collects exact timestamps during testing
+   - Runs post-hoc log analysis automatically
 
-3. **`scripts/enable-verbose-logging.sh`**: Verbose logging setup
-   - Enables debug logging for gamescope and Steam
-   - Sets up systemd overrides for detailed logging
-   - Creates real-time monitoring tools
+3. **`scripts/analyze-recording-logs.sh`**: Post-hoc log analysis
+   - Extracts logs using timestamp ranges
+   - Compares system logs between modes
+   - Generates markdown reports for upstream reporting
+
+4. **`scripts/archive/monitor-recording-logs.sh`**: Archived (not viable)
+   - Moved to archive due to Gaming Mode constraints
+   - Replaced by post-hoc analysis approach
+
+### Investigation Workflow
+1. **Enable verbose logging** (one-time setup)
+2. **Test in Big Picture Mode**, record exact timestamps
+3. **Switch to Gaming Mode**, test recording, record timestamps
+4. **Return to Desktop Mode**, run analysis scripts
+5. **Review generated report** for key differences
 
 ### Key Log Sources
-- **Gamescope**: `journalctl --user -u gamescope-session`
+- **Gamescope**: `journalctl --user -u gamescope-session --since TIME --until TIME`
 - **Steam**: `/home/deck/.local/share/Steam/logs/gameprocess_log.txt`
-- **System**: `journalctl -f | grep -i "record\|overlay\|notification"`
+- **System**: `journalctl --since TIME --until TIME | grep -i "record\|overlay\|notification"`
 - **MangoHud**: Process monitoring and config file changes
+
+### Documentation
+- **`docs/LOGGING_GUIDE.md`**: Complete step-by-step investigation guide
+- Includes troubleshooting, expected results, and reporting guidance
 
 ## Future Research Directions
 

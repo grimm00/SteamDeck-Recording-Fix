@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Steam Deck Verbose Logging Setup
-# Enables verbose logging for gamescope and Steam to capture recording events
+# Enables system-level verbose logging that persists across Gaming Mode switches
 
 set -e
 
@@ -9,77 +9,10 @@ echo "🔍 Steam Deck Verbose Logging Setup"
 echo "==================================="
 echo ""
 
-# Function to enable gamescope verbose logging
-enable_gamescope_logging() {
-    echo "🎮 Setting up gamescope verbose logging..."
-    
-    # Check if gamescope is running
-    if pgrep -f "gamescope" > /dev/null; then
-        echo "   Gamescope is currently running"
-        echo "   You may need to restart gamescope for changes to take effect"
-    fi
-    
-    # Create gamescope config directory
-    mkdir -p ~/.config/gamescope
-    
-    # Create gamescope config for verbose logging
-    cat > ~/.config/gamescope/gamescope.conf << 'EOF'
-# Gamescope verbose logging configuration
-# Enable debug logging
---log-level=debug
-
-# Enable overlay debugging
---debug-overlay
-
-# Enable compositor debugging
---debug-compositor
-
-# Enable Wayland debugging
---debug-wayland
-
-# Enable HDR debugging
---debug-hdr
-
-# Enable FSR debugging
---debug-fsr
-EOF
-    
-    echo "   ✅ Gamescope config created: ~/.config/gamescope/gamescope.conf"
-}
-
-# Function to enable Steam verbose logging
-enable_steam_logging() {
-    echo "🎮 Setting up Steam verbose logging..."
-    
-    # Create Steam launch script with verbose logging
-    cat > ~/.local/share/Steam/steam-verbose.sh << 'EOF'
-#!/bin/bash
-# Steam with verbose logging for recording debugging
-
-export STEAM_DEBUG=1
-export STEAM_VERBOSE=1
-export STEAM_LOG_LEVEL=debug
-
-# Enable Steam overlay debugging
-export STEAM_OVERLAY_DEBUG=1
-
-# Enable Steam recording debugging
-export STEAM_RECORDING_DEBUG=1
-
-# Enable Steam compositor debugging
-export STEAM_COMPOSITOR_DEBUG=1
-
-# Run Steam with debug flags
-exec /home/deck/.local/share/Steam/ubuntu12_32/steam "$@"
-EOF
-    
-    chmod +x ~/.local/share/Steam/steam-verbose.sh
-    echo "   ✅ Steam verbose script created: ~/.local/share/Steam/steam-verbose.sh"
-}
-
-# Function to enable system logging
+# Function to enable system-level verbose logging
 enable_system_logging() {
-    echo "🖥️  Setting up system logging..."
+    echo "🖥️  Setting up system-level verbose logging..."
+    echo "   This configuration will persist across Gaming Mode switches"
     
     # Create systemd override for gamescope session
     sudo mkdir -p /etc/systemd/user/gamescope-session.service.d/
@@ -90,45 +23,15 @@ Environment=GAMESCOPE_DEBUG=1
 Environment=GAMESCOPE_VERBOSE=1
 Environment=WAYLAND_DEBUG=1
 Environment=MANGOHUD_DEBUG=1
+Environment=STEAM_DEBUG=1
+Environment=STEAM_VERBOSE=1
 EOF
     
     sudo mv /tmp/gamescope-override.conf /etc/systemd/user/gamescope-session.service.d/override.conf
     sudo systemctl daemon-reload
     
     echo "   ✅ Systemd override created for gamescope-session"
-}
-
-# Function to create log monitoring script
-create_log_monitor() {
-    echo "📊 Creating log monitoring script..."
-    
-    cat > ~/.local/bin/monitor-recording-debug.sh << 'EOF'
-#!/bin/bash
-# Real-time recording debug monitor
-
-echo "🔍 Recording Debug Monitor"
-echo "========================="
-echo ""
-
-# Monitor gamescope logs
-echo "🎮 Gamescope logs:"
-journalctl --user -u gamescope-session -f --since "now" | grep -i "record\|overlay\|notification\|compositor" &
-
-# Monitor Steam logs
-echo "🎮 Steam logs:"
-tail -f /home/deck/.local/share/Steam/logs/gameprocess_log.txt | grep -i "record\|overlay\|notification" &
-
-# Monitor system logs
-echo "🖥️  System logs:"
-journalctl -f --since "now" | grep -i "record\|overlay\|notification\|mango" &
-
-wait
-EOF
-    
-    chmod +x ~/.local/bin/monitor-recording-debug.sh
-    mkdir -p ~/.local/bin
-    
-    echo "   ✅ Log monitor created: ~/.local/bin/monitor-recording-debug.sh"
+    echo "   ✅ Verbose logging will be active in both Desktop and Gaming Mode"
 }
 
 # Function to show usage instructions
@@ -139,22 +42,12 @@ show_instructions() {
     echo ""
     echo "1. **Restart Steam Deck** to apply systemd changes"
     echo ""
-    echo "2. **Test in Gaming Mode**:"
-    echo "   - Switch to Gaming Mode"
-    echo "   - Start a game"
-    echo "   - Run: ~/.local/bin/monitor-recording-debug.sh"
-    echo "   - Start recording (Steam + R1)"
-    echo "   - Watch for debug messages around the 6-second mark"
+    echo "2. **Use with analyze-recording-logs.sh**:"
+    echo "   - This enables verbose logging that persists across mode switches"
+    echo "   - After restart, run compare-recording-modes.sh for guided testing"
+    echo "   - Use analyze-recording-logs.sh to extract and compare logs"
     echo ""
-    echo "3. **Test in Big Picture Mode**:"
-    echo "   - Switch to Desktop Mode"
-    echo "   - Run: ~/.local/share/Steam/steam-verbose.sh"
-    echo "   - Start Big Picture Mode"
-    echo "   - Start a game and test recording"
-    echo ""
-    echo "4. **Compare the logs** between the two modes"
-    echo ""
-    echo "🔍 Key things to look for:"
+    echo "🔍 Key things the logs will capture:"
     echo "   - Overlay state changes in gamescope logs"
     echo "   - Recording notification events in Steam logs"
     echo "   - Compositor reconfiguration messages"
@@ -168,20 +61,6 @@ check_logging_status() {
     echo "========================="
     echo ""
     
-    # Check gamescope config
-    if [[ -f ~/.config/gamescope/gamescope.conf ]]; then
-        echo "✅ Gamescope verbose config: ~/.config/gamescope/gamescope.conf"
-    else
-        echo "❌ Gamescope verbose config: Not found"
-    fi
-    
-    # Check Steam verbose script
-    if [[ -f ~/.local/share/Steam/steam-verbose.sh ]]; then
-        echo "✅ Steam verbose script: ~/.local/share/Steam/steam-verbose.sh"
-    else
-        echo "❌ Steam verbose script: Not found"
-    fi
-    
     # Check systemd override
     if [[ -f /etc/systemd/user/gamescope-session.service.d/override.conf ]]; then
         echo "✅ Systemd override: /etc/systemd/user/gamescope-session.service.d/override.conf"
@@ -189,19 +68,12 @@ check_logging_status() {
         echo "❌ Systemd override: Not found"
     fi
     
-    # Check log monitor
-    if [[ -f ~/.local/bin/monitor-recording-debug.sh ]]; then
-        echo "✅ Log monitor: ~/.local/bin/monitor-recording-debug.sh"
-    else
-        echo "❌ Log monitor: Not found"
-    fi
-    
     echo ""
 }
 
 # Main execution
 main() {
-    echo "This script will enable verbose logging for recording debugging."
+    echo "This script enables system-level verbose logging that persists across Gaming Mode switches."
     echo ""
     
     # Check if running as root for systemd changes
@@ -214,10 +86,7 @@ main() {
     echo ""
     read -p "Press Enter to continue..."
     
-    enable_gamescope_logging
-    enable_steam_logging
     enable_system_logging
-    create_log_monitor
     
     check_logging_status
     show_instructions
