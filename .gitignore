@@ -1,0 +1,45 @@
+# Backup files
+*.backup
+*.bak
+*~
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test results
+testing/test-results/*
+!testing/test-results/.gitkeep
+
+# User-specific files
+user-configs/
+personal-notes/
+
+# System files
+*.pid
+*.lock
+
+# Build artifacts
+dist/
+build/
+*.o
+*.so
+*.dylib
+
+# Package files
+*.deb
+*.rpm
+*.tar.gz
+*.zip
