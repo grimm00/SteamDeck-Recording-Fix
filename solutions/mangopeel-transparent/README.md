@@ -1,8 +1,12 @@
 # MangoPeel Transparent Overlay Solution
 
+⚠️ **IMPORTANT NOTICE**: This solution has known reliability issues. The MangoPeel plugin's preset system may not consistently apply changes, making this solution unreliable for many users.
+
+**Recommended Alternative**: If you experience issues with this solution, try the [Direct MangoHud Configuration](../mangohud-direct/) instead, which is more reliable and doesn't depend on plugin functionality.
+
 ## Overview
 
-This solution uses MangoPeel's transparent overlay to prevent Steam Deck recording choppiness. It's the **easiest and most user-friendly** solution for users who already have MangoPeel installed.
+This solution uses MangoPeel's transparent overlay to prevent Steam Deck recording choppiness. While it can be user-friendly when working, it has known reliability issues with the preset system.
 
 ## How It Works
 
@@ -111,19 +115,35 @@ background_alpha=0.0
 2. **Monitor Resources**: Check CPU/GPU usage
 3. **Alternative Solutions**: Try direct MangoHud config
 
+### Preset System Not Working (Common Issue)
+**Symptoms**: Preset changes don't take effect, recording still choppy
+
+**This is a known issue with the MangoPeel plugin. The preset system may not consistently apply changes.**
+
+**Solutions**:
+1. **Try Alternative Solution**: Use [Direct MangoHud Configuration](../mangohud-direct/) instead
+2. **Check Plugin Status**: Verify MangoPeel is actually running
+3. **Restart Everything**: Restart Steam, Decky Loader, and MangoPeel
+4. **Apply Compatibility Fixes**: Use fixes from [MangoPeel SteamOS Fixes](https://github.com/grimm00/MangoPeel_Steam_OS_Fixes)
+5. **Manual Configuration**: Try manually editing MangoHud config files
+
+**If none of these work**: The plugin may have fundamental issues. Switch to Direct MangoHud Configuration.
+
 ## Advantages
 
-- ✅ **Easiest Setup**: Just change one preset setting
+- ✅ **Easiest Setup**: Just change one preset setting (when working)
 - ✅ **No Manual Config**: No file editing required
 - ✅ **Toggle On/Off**: Can easily enable/disable
-- ✅ **User-Friendly**: Works through plugin interface
-- ✅ **Immediate Effect**: Works right away
+- ✅ **User-Friendly**: Works through plugin interface (when working)
+- ✅ **Immediate Effect**: Works right away (when working)
 
 ## Disadvantages
 
 - ❌ **Plugin Dependency**: Requires MangoPeel plugin
 - ❌ **Decky Loader**: Requires Decky Loader installation
 - ❌ **Compatibility**: May need SteamOS compatibility fixes
+- ❌ **Reliability Issues**: Preset system may not work consistently
+- ❌ **Unpredictable**: May work for some users but not others
 
 ## Performance Impact
 

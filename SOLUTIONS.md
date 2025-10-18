@@ -8,41 +8,14 @@ This document provides a comprehensive comparison of all available solutions for
 
 | Solution | Difficulty | Effectiveness | Requirements | Pros | Cons |
 |----------|------------|---------------|--------------|------|------|
-| [MangoPeel Transparent](solutions/mangopeel-transparent/) | ⭐ Easy | ⭐⭐⭐⭐⭐ | Decky Loader + MangoPeel | User-friendly, toggle on/off | Plugin dependency |
 | [Direct MangoHud](solutions/mangohud-direct/) | ⭐⭐ Moderate | ⭐⭐⭐⭐⭐ | MangoHud only | No plugin needed, persistent | Manual configuration |
+| [MangoPeel Transparent](solutions/mangopeel-transparent/) | ⭐ Easy | ⭐⭐⭐ | Decky Loader + MangoPeel | User-friendly, toggle on/off | Plugin dependency, reliability issues |
 | [Systemd Service](solutions/systemd-service/) | ⭐⭐⭐ Advanced | ⭐⭐⭐⭐⭐ | System access | Automatic, professional | Complex setup |
 | [Manual Workarounds](docs/manual-workarounds.md) | ⭐⭐⭐⭐ Expert | ⭐⭐⭐ Variable | Various | Flexible | Temporary, complex |
 
 ## Detailed Solutions
 
-### 1. MangoPeel Transparent Overlay ⭐⭐⭐⭐⭐
-
-**Best for**: Users with MangoPeel plugin installed
-
-**How it works**: Uses MangoPeel's preset system to create a transparent overlay that prevents gamescope from changing overlay states.
-
-**Installation**:
-1. Install Decky Loader and MangoPeel plugin
-2. Set preset to "Preset 0 (Recording Fix)"
-3. Overlay becomes completely transparent
-
-**Effectiveness**: 95% - Works for most users
-**Performance Impact**: Negligible (< 0.1% CPU)
-**Maintenance**: None required
-
-**Pros**:
-- ✅ Easiest to use
-- ✅ No manual configuration
-- ✅ Can be toggled on/off
-- ✅ User-friendly interface
-- ✅ Immediate effect
-
-**Cons**:
-- ❌ Requires Decky Loader
-- ❌ Requires MangoPeel plugin
-- ❌ May need SteamOS compatibility fixes
-
-### 2. Direct MangoHud Configuration ⭐⭐⭐⭐⭐
+### 1. Direct MangoHud Configuration ⭐⭐⭐⭐⭐
 
 **Best for**: Users who want a plugin-free solution
 
@@ -69,6 +42,37 @@ This document provides a comprehensive comparison of all available solutions for
 - ❌ Terminal access needed
 - ❌ Less user-friendly
 - ❌ Per-game setup may be needed
+
+### 2. MangoPeel Transparent Overlay ⭐⭐⭐
+
+**Best for**: Users with MangoPeel plugin installed (may have reliability issues)
+
+**How it works**: Uses MangoPeel's preset system to create a transparent overlay that prevents gamescope from changing overlay states.
+
+⚠️ **Known Issues**: The plugin has reliability issues with preset system. Preset changes may not consistently take effect.
+
+**Installation**:
+1. Install Decky Loader and MangoPeel plugin
+2. Set preset to "Preset 0 (Recording Fix)"
+3. Overlay should become completely transparent
+
+**Effectiveness**: 60-80% - May work for some users, but inconsistent
+**Performance Impact**: Negligible (< 0.1% CPU)
+**Maintenance**: None required
+
+**Pros**:
+- ✅ Easiest to use (when working)
+- ✅ No manual configuration
+- ✅ Can be toggled on/off
+- ✅ User-friendly interface
+- ✅ Immediate effect (when working)
+
+**Cons**:
+- ❌ Requires Decky Loader
+- ❌ Requires MangoPeel plugin
+- ❌ May need SteamOS compatibility fixes
+- ❌ **Preset system reliability issues**
+- ❌ **May not work consistently**
 
 ### 3. Systemd Service ⭐⭐⭐⭐
 
@@ -129,10 +133,10 @@ This document provides a comprehensive comparison of all available solutions for
 ## Choosing the Right Solution
 
 ### For Beginners
-**Recommended**: MangoPeel Transparent Overlay
-- Easiest to use
-- No technical knowledge required
-- Works immediately
+**Recommended**: Direct MangoHud Configuration
+- More reliable than plugin-based solutions
+- Simple terminal commands
+- Works consistently
 
 ### For Intermediate Users
 **Recommended**: Direct MangoHud Configuration
@@ -173,7 +177,6 @@ This document provides a comprehensive comparison of all available solutions for
 ## Effectiveness Ratings
 
 ### ⭐⭐⭐⭐⭐ (95%+ success rate)
-- MangoPeel Transparent Overlay
 - Direct MangoHud Configuration
 - Systemd Service
 
@@ -182,6 +185,7 @@ This document provides a comprehensive comparison of all available solutions for
 - Custom configurations
 
 ### ⭐⭐⭐ (60-80% success rate)
+- MangoPeel Transparent Overlay (reliability issues)
 - Basic manual workarounds
 - Temporary solutions
 

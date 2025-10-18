@@ -68,6 +68,7 @@ if [[ -d /home/deck/homebrew ]]; then
     echo "✅ Decky Loader is installed"
     if [[ -d /home/deck/homebrew/plugins/MangoPeel ]]; then
         echo "✅ MangoPeel plugin is installed"
+        echo "⚠️  Note: MangoPeel has known reliability issues with preset system"
         if [[ -f /home/deck/homebrew/plugins/MangoPeel/main.py ]]; then
             echo "✅ MangoPeel main.py exists"
         else
@@ -143,17 +144,19 @@ if [[ "$response" =~ ^[Yy]$ ]]; then
     echo ""
     
     # Recommend solutions based on what's available
-    if [[ -d /home/deck/homebrew/plugins/MangoPeel ]]; then
-        echo "🎯 **Recommended Solution: MangoPeel Transparent Overlay**"
-        echo "   - Easiest solution for you"
-        echo "   - Just change preset to 'Preset 0 (Recording Fix)'"
-        echo "   - See: solutions/mangopeel-transparent/README.md"
-        echo ""
-    elif command -v mangohud &> /dev/null; then
+    if command -v mangohud &> /dev/null; then
         echo "🎯 **Recommended Solution: Direct MangoHud Configuration**"
+        echo "   - Most reliable solution"
         echo "   - No plugin required"
         echo "   - Run: ./solutions/mangohud-direct/setup.sh"
         echo "   - See: solutions/mangohud-direct/README.md"
+        echo ""
+    elif [[ -d /home/deck/homebrew/plugins/MangoPeel ]]; then
+        echo "🎯 **Alternative Solution: MangoPeel Transparent Overlay**"
+        echo "   - ⚠️  Note: Has known reliability issues"
+        echo "   - Just change preset to 'Preset 0 (Recording Fix)'"
+        echo "   - See: solutions/mangopeel-transparent/README.md"
+        echo "   - If it doesn't work, try Direct MangoHud Configuration"
         echo ""
     else
         echo "🎯 **Recommended Solution: Install MangoHud**"

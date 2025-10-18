@@ -15,33 +15,11 @@ Steam Deck game recording becomes **choppy and stuttery after approximately 6 se
 - 🕐 **Timing**: Coincides with Steam's recording notification disappearing
 - 🎮 **Affects**: All games and recording methods
 
-## Quick Fix (Easiest Solution)
+## Quick Fix (Recommended Solutions)
 
-### Option 1: MangoPeel Transparent Overlay (Recommended)
+### Option 1: Direct MangoHud Configuration (Recommended)
 
-**Prerequisites**: MangoPeel plugin installed via Decky Loader
-
-1. **Install MangoPeel** (if not already installed):
-   - Install Decky Loader
-   - Install MangoPeel from the Decky Store
-   - Apply SteamOS compatibility fixes (see [MangoPeel project](https://github.com/grimm00/MangoPeel_Steam_OS_Fixes))
-
-2. **Configure Transparent Overlay**:
-   - Open MangoPeel in Steam Deck's Quick Access menu
-   - Set preset to **Preset 0 (Recording Fix)**
-   - The overlay will be completely invisible but active
-
-3. **Test Recording**:
-   - Start any game
-   - Begin recording (Steam + R1)
-   - Record for 10+ seconds
-   - Verify smooth recording throughout
-
-**Result**: Recording stays smooth for the entire duration! 🎉
-
-### Option 2: Direct MangoHud Configuration
-
-**No plugin required** - works on any Steam Deck
+**No plugin required** - works reliably on any Steam Deck
 
 1. **Create MangoHud Configuration**:
    ```bash
@@ -58,14 +36,40 @@ Steam Deck game recording becomes **choppy and stuttery after approximately 6 se
    - Add `MANGOHUD=1` to your game's launch options
    - Or set it globally in Steam settings
 
+3. **Test Recording**:
+   - Start any game
+   - Begin recording (Steam + R1)
+   - Record for 10+ seconds
+   - Verify smooth recording throughout
+
+**Result**: Recording stays smooth for the entire duration! 🎉
+
+### Option 2: MangoPeel Transparent Overlay (May Work)
+
+⚠️ **Note**: This solution has known reliability issues. The plugin may not consistently apply preset changes.
+
+**Prerequisites**: MangoPeel plugin installed via Decky Loader
+
+1. **Install MangoPeel** (if not already installed):
+   - Install Decky Loader
+   - Install MangoPeel from the Decky Store
+   - Apply SteamOS compatibility fixes (see [MangoPeel project](https://github.com/grimm00/MangoPeel_Steam_OS_Fixes))
+
+2. **Configure Transparent Overlay**:
+   - Open MangoPeel in Steam Deck's Quick Access menu
+   - Set preset to **Preset 0 (Recording Fix)**
+   - The overlay should be completely invisible but active
+
 3. **Test Recording**: Same as above
+
+**If this doesn't work**: Try Option 1 (Direct MangoHud Configuration) instead.
 
 ## Alternative Solutions
 
 | Solution | Difficulty | Effectiveness | Requirements |
 |----------|------------|---------------|--------------|
-| [MangoPeel Transparent](solutions/mangopeel-transparent/) | ⭐ Easy | ⭐⭐⭐⭐⭐ | Decky Loader + MangoPeel |
 | [Direct MangoHud](solutions/mangohud-direct/) | ⭐⭐ Moderate | ⭐⭐⭐⭐⭐ | MangoHud only |
+| [MangoPeel Transparent](solutions/mangopeel-transparent/) | ⭐ Easy | ⭐⭐⭐ | Decky Loader + MangoPeel |
 | [Systemd Service](solutions/systemd-service/) | ⭐⭐⭐ Advanced | ⭐⭐⭐⭐⭐ | System access |
 | [Manual Workarounds](docs/manual-workarounds.md) | ⭐⭐⭐⭐ Expert | ⭐⭐⭐ Variable | Various |
 

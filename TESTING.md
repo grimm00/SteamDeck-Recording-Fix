@@ -46,11 +46,14 @@ This guide provides comprehensive testing procedures for the Steam Deck recordin
 ### 2. Solution Testing
 
 #### MangoPeel Transparent Overlay Test
+⚠️ **Note**: This solution has known reliability issues. The preset system may not consistently apply changes.
+
 1. **Install MangoPeel**: Ensure plugin is installed and working
 2. **Set Preset**: Change to "Preset 0 (Recording Fix)"
-3. **Verify Transparency**: Ensure overlay is invisible
+3. **Verify Transparency**: Ensure overlay is invisible (may not work consistently)
 4. **Test Recording**: Record for 15+ seconds
 5. **Check Quality**: Verify smooth recording throughout
+6. **If Not Working**: Try Direct MangoHud Configuration instead
 
 #### Direct MangoHud Test
 1. **Create Configuration**: Set up MangoHud config
@@ -123,6 +126,37 @@ This guide provides comprehensive testing procedures for the Steam Deck recordin
 - **Quality Analysis**: Analyzes recording quality
 - **Performance Monitoring**: Tracks resource usage
 - **Report Generation**: Creates test reports
+
+## Verifying Solution Effectiveness
+
+### Important: Not All Solutions Work Consistently
+
+⚠️ **MangoPeel Plugin Issues**: The MangoPeel plugin has known reliability issues with its preset system. Even if the plugin appears to be working, preset changes may not actually take effect.
+
+### How to Verify a Solution is Actually Working
+
+1. **Test Multiple Times**: Run the same test multiple times to check consistency
+2. **Check System State**: Verify the solution is actually active (not just configured)
+3. **Monitor Resources**: Check if MangoHud processes are running when expected
+4. **Compare Results**: Test with and without the solution to see clear differences
+5. **Document Failures**: If a solution doesn't work, document the specific failure mode
+
+### Common Failure Modes
+
+#### MangoPeel Plugin Failures
+- **Symptom**: Preset changes don't take effect
+- **Cause**: Plugin preset system reliability issues
+- **Solution**: Switch to Direct MangoHud Configuration
+
+#### Configuration Issues
+- **Symptom**: Solution appears configured but doesn't work
+- **Cause**: Configuration not being applied or read correctly
+- **Solution**: Verify configuration files and restart services
+
+#### System State Issues
+- **Symptom**: Solution works sometimes but not others
+- **Cause**: Inconsistent system state or resource conflicts
+- **Solution**: Check for conflicting overlays or services
 
 ## Test Results Documentation
 
