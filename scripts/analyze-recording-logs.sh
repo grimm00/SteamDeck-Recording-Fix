@@ -17,16 +17,16 @@ show_usage() {
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
-    echo "  --bigpicture-start TIME    Start time for Big Picture Mode test (HH:MM:SS)"
-    echo "  --bigpicture-end TIME      End time for Big Picture Mode test (HH:MM:SS)"
-    echo "  --gaming-start TIME        Start time for Gaming Mode test (HH:MM:SS)"
-    echo "  --gaming-end TIME          End time for Gaming Mode test (HH:MM:SS)"
+    echo "  --bigpicture-start TIME    Start time for Big Picture Mode test (HH:MM)"
+    echo "  --bigpicture-end TIME      End time for Big Picture Mode test (HH:MM)"
+    echo "  --gaming-start TIME        Start time for Gaming Mode test (HH:MM)"
+    echo "  --gaming-end TIME          End time for Gaming Mode test (HH:MM)"
     echo "  --output FILE              Output file for analysis report (default: auto-generated)"
     echo "  --help                     Show this help message"
     echo ""
     echo "Example:"
-    echo "  $0 --bigpicture-start 23:15:32 --bigpicture-end 23:15:47 \\"
-    echo "     --gaming-start 23:20:15 --gaming-end 23:20:30"
+    echo "  $0 --bigpicture-start 23:15 --bigpicture-end 23:16 \\"
+    echo "     --gaming-start 23:20 --gaming-end 23:21"
     echo ""
 }
 
@@ -94,11 +94,34 @@ extract_logs() {
     
     mkdir -p "$output_dir"
     
-    echo "📊 Extracting logs for $mode mode ($start_time - $end_time)..."
+    if [[ ! -d "$output_dir" ]]; then
+        echo "❌ Error: Failed to create output directory: $output_dir" >&2
+        return 1
+    fi
+    
+    echo "📊 Extracting logs for $mode mode ($start_time - $end_time)..." >&2
+    
+    # Handle midnight crossover - if end_time is earlier than start_time, assume next day
+    # We need to use the correct date for the logs (yesterday's date)
+    local log_date=$(date -d "yesterday" +%Y-%m-%d)
+    local since_arg="$log_date $start_time"
+    local until_arg="$log_date $end_time"
+    
+    # Convert times to minutes for comparison
+    local start_minutes=$(echo "$start_time" | awk -F: '{print $1*60 + $2}')
+    local end_minutes=$(echo "$end_time" | awk -F: '{print $1*60 + $2}')
+    
+    # If end time is before start time, assume it's the next day
+    if [[ $end_minutes -lt $start_minutes ]]; then
+        # For midnight crossover, use today's date for the end time
+        local today_date=$(date +%Y-%m-%d)
+        until_arg="$today_date $end_time"
+        echo "   Note: Detected midnight crossover, using '$today_date $end_time'" >&2
+    fi
     
     # Extract gamescope logs
     echo "=== GAMESCOPE LOGS ===" > "$output_dir/${mode}_gamescope.log"
-    journalctl --user -u gamescope-session --since "$start_time" --until "$end_time" >> "$output_dir/${mode}_gamescope.log" 2>&1 || true
+    journalctl --user -u gamescope-session --since "$since_arg" --until "$until_arg" >> "$output_dir/${mode}_gamescope.log" 2>&1 || true
     
     # Extract Steam logs (approximate - Steam logs don't have precise timestamps)
     echo "=== STEAM LOGS ===" > "$output_dir/${mode}_steam.log"
@@ -106,12 +129,14 @@ extract_logs() {
     
     # Extract system logs
     echo "=== SYSTEM LOGS ===" > "$output_dir/${mode}_system.log"
-    journalctl --since "$start_time" --until "$end_time" | grep -i "record\|overlay\|notification\|mango\|steam" >> "$output_dir/${mode}_system.log" 2>&1 || true
+    journalctl --since "$since_arg" --until "$until_arg" | grep -i "record\|overlay\|notification\|mango\|steam" >> "$output_dir/${mode}_system.log" 2>&1 || true
     
     # Extract MangoHud processes
     echo "=== MANGOHUD PROCESSES ===" > "$output_dir/${mode}_mangohud.log"
     ps aux | grep -i mango | grep -v grep >> "$output_dir/${mode}_mangohud.log" 2>&1 || true
     
+    echo "✅ Log extraction complete for $mode mode" >&2
+    echo "   Output directory: $output_dir" >&2
     echo "$output_dir"
 }
 
@@ -120,7 +145,18 @@ analyze_differences() {
     local bp_dir="$1"
     local gm_dir="$2"
     
-    echo "🔍 Analyzing differences between modes..."
+    echo "🔍 Analyzing differences between modes..." >&2
+    
+    # Check if directories exist
+    if [[ ! -d "$bp_dir" ]]; then
+        echo "❌ Error: Big Picture mode directory not found: $bp_dir" >&2
+        return 1
+    fi
+    
+    if [[ ! -d "$gm_dir" ]]; then
+        echo "❌ Error: Gaming mode directory not found: $gm_dir" >&2
+        return 1
+    fi
     
     # Compare gamescope logs
     echo "### Gamescope Log Differences" >> "$OUTPUT_FILE"
