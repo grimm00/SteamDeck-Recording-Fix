@@ -18,6 +18,11 @@ Steam Deck game recording becomes choppy and stuttery after approximately 6 seco
 - **Game Types**: All games tested show the same issue
 - **Hardware**: All Steam Deck models affected
 
+### Critical Discovery: Mode-Specific Behavior
+- **Gaming Mode (Gamescope)**: Recording becomes choppy after 6 seconds
+- **Big Picture Mode (Desktop)**: Recording works perfectly throughout entire duration
+- **Implication**: Issue is specifically related to gamescope compositor, not Steam recording system
+
 ## Timeline Analysis
 
 ### Recording Process Timeline
@@ -193,6 +198,32 @@ MangoHud provides:
 - Prevents compositor reconfiguration
 - Keeps resource allocation stable
 - Provides stable recording pipeline
+
+## Logging and Investigation Tools
+
+### Available Scripts
+The project includes several scripts to help investigate the recording issue:
+
+1. **`scripts/monitor-recording-logs.sh`**: Comprehensive log monitoring
+   - Monitors gamescope, Steam, system, and MangoHud logs
+   - Captures timestamped events during recording
+   - Creates detailed log files for analysis
+
+2. **`scripts/compare-recording-modes.sh`**: Mode comparison tool
+   - Compares Big Picture Mode vs Gaming Mode behavior
+   - Captures system state differences
+   - Provides analysis guidance
+
+3. **`scripts/enable-verbose-logging.sh`**: Verbose logging setup
+   - Enables debug logging for gamescope and Steam
+   - Sets up systemd overrides for detailed logging
+   - Creates real-time monitoring tools
+
+### Key Log Sources
+- **Gamescope**: `journalctl --user -u gamescope-session`
+- **Steam**: `/home/deck/.local/share/Steam/logs/gameprocess_log.txt`
+- **System**: `journalctl -f | grep -i "record\|overlay\|notification"`
+- **MangoHud**: Process monitoring and config file changes
 
 ## Future Research Directions
 
